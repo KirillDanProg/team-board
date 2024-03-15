@@ -4,7 +4,7 @@ import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import Hint from "@/app/components/hint";
 
-const NewButton = () => {
+const AddOrganizationButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -29,4 +29,4 @@ const NewButton = () => {
   );
 };
 
-export default NewButton;
+export default AddOrganizationButton;
