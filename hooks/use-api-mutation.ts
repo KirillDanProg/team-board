@@ -3,20 +3,18 @@ import { useState } from "react";
 
 export const useApiMutation = (mutationFunction: any) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<unknown>("");
   const apiMutation = useMutation(mutationFunction);
 
   const mutate = async (payload: any) => {
     setIsLoading(true);
     try {
-      const res = await apiMutation(payload);
-      return res;
+      return apiMutation(payload);
     } catch (error) {
-      setError(error);
+      return false;
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { mutate, isLoading, error };
+  return { mutate, isLoading };
 };
