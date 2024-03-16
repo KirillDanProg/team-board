@@ -19,7 +19,6 @@ export const createBoard = mutation({
   args: { orgId: v.string(), title: v.string() },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
-    console.log(identity);
     if (!identity) {
       throw new Error("Unauthorized");
     }
