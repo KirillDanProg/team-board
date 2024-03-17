@@ -6,7 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 const font = Montserrat({
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["200", "400", "600", "700"],
 });
 export const metadata: Metadata = {
   title: "Team Board",
