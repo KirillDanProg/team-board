@@ -33,3 +33,21 @@ export const createBoard = mutation({
     return board;
   },
 });
+
+export const deleteBoard = mutation({
+  args: { id: v.id("boards") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error("Unauthorized");
+    }
+
+    try {
+      await ctx.db.delete(args.id);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+});
