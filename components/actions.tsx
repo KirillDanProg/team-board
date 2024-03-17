@@ -10,6 +10,8 @@ import { useApiMutation } from "@/hooks/use-api-mutation";
 import { api } from "@/convex/_generated/api";
 import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
+import { Button } from "./ui/button";
+import ConfirmModal from "./confirm-modal";
 
 interface Props {
   id: string;
@@ -52,10 +54,19 @@ const Actions = ({ children, side = "right", sideOffset = 0, id, className }: Pr
           <Link2 className="w-4 h-4 mr-2" />
           Скопировать ссылку
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" onClick={deleteBoardHandler}>
-          <Trash2 className="w-4 h-4 mr-2 text-red-600" />
-          Удалить
-        </DropdownMenuItem>
+        <ConfirmModal
+          color="red-600"
+          action="Удалить"
+          header="Удалить борд?"
+          description="Борд и весь его контент будет удален"
+          disabled={isLoading}
+          onConfirm={deleteBoardHandler}
+        >
+          <Button variant="ghost" className="w-full text-start pl-2 justify-start">
+            <Trash2 className="w-4 h-4 mr-2 text-red-600" />
+            Удалить
+          </Button>
+        </ConfirmModal>
       </DropdownMenuContent>
     </DropdownMenu>
   );
