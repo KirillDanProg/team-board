@@ -12,8 +12,12 @@ interface Props {
 export default function Home({ searchParams }: Props) {
   const { organization } = useOrganization();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center h-[calc(100%-80px)]">
-      {!organization ? <EmptyOrganization /> : <BoardList query={searchParams} />}
+    <div className="flex-1 h-[calc(100%-80px)] p-6">
+      {!organization ? (
+        <EmptyOrganization />
+      ) : (
+        <BoardList orgId={organization.id} query={searchParams} />
+      )}
     </div>
   );
 }

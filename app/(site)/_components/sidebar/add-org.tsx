@@ -2,7 +2,7 @@
 import { CreateOrganization } from "@clerk/nextjs";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import Hint from "@/app/components/hint";
+import Hint from "@/components/hint";
 
 const AddOrganizationButton = () => {
   return (

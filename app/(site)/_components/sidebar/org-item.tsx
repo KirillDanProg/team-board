@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { isAscii } from "buffer";
-import Hint from "@/app/components/hint";
+import Hint from "@/components/hint";
 
 interface Props {
   id: string;

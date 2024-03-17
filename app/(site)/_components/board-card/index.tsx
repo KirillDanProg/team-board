@@ -6,6 +6,9 @@ import { useAuth } from "@clerk/nextjs";
 import { formatDistanceToNow } from "date-fns";
 import { ru } from "date-fns/locale";
 import Footer from "./footer";
+import Actions from "@/components/actions";
+import { MoreHorizontal } from "lucide-react";
+
 interface Props {
   id: string;
   title: string;
@@ -36,6 +39,9 @@ const BoardCard = ({
         <div className="relative flex-1 bg-amber-50">
           <Image src={imageUrl} className="object-fit" fill alt={title} />
           <Overlay />
+          <Actions id={id} side="right" className="opacity-0 group-hover:opacity-100">
+            <MoreHorizontal className="absolute top-1 right-1 z-50 w-10 h-6 text-white" />
+          </Actions>
         </div>
         <Footer
           title={title}
@@ -43,6 +49,7 @@ const BoardCard = ({
           authorLabel={authorLabel}
           createdAtLabel={createdAtLabel}
           onClick={() => {}}
+          disabled={false}
         />
       </div>
     </Link>

@@ -9,33 +9,33 @@ import { toast } from "sonner";
 
 const EmptyBoards = () => {
   const { organization } = useOrganization();
-  const { mutate, isLoading, error } = useApiMutation(api.board.createBoard);
+  const { mutate, isLoading } = useApiMutation(api.board.createBoard);
 
   const onCreateBoardHandler = async () => {
     if (!organization) return;
 
     const result = await mutate({
       orgId: organization.id,
-      title: "Доска",
+      title: "Борд",
     });
 
-    if (!result || error) {
-      toast("Не удалось создать доску");
+    if (!result) {
+      toast.error("Не удалось создать борд");
     } else {
-      toast("Доска успешно создана!");
+      toast.success("Борд успешно создан!");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="h-full flex flex-col items-center justify-center">
       <Image src="/create-board.svg" width={300} height={300} alt="Empty" />
-      <h2 className="text-2xl semibold mt-6">Создай свою первую доску</h2>
+      <h2 className="text-2xl semibold mt-6">Создай свой первый борд</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Начни с создания доски для своего проекта
+        Начни с создания борда для своего проекта
       </p>
       <div className="mt-8">
         <Button disabled={isLoading} onClick={onCreateBoardHandler} size="lg">
-          Создать доску
+          Создать борд
         </Button>
       </div>
     </div>

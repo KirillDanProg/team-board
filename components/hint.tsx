@@ -16,7 +16,7 @@ const Hint = ({ label, children, side, align, sideOffset, alignOffset }: Props) 
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
-          className="text-white bg-black border-black"
+          className="text-white bg-black border-black opacity-0.5"
           align={align}
           side={side}
           alignOffset={alignOffset}
