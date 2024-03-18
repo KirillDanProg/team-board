@@ -39,7 +39,7 @@ const BoardCard = ({
         <div className="relative flex-1 bg-amber-50">
           <Image src={imageUrl} className="object-fit" fill alt={title} />
           <Overlay />
-          <Actions id={id} side="right" className="opacity-0 group-hover:opacity-100">
+          <Actions title={title} id={id} side="right" className="opacity-0 group-hover:opacity-100">
             <MoreHorizontal className="absolute top-1 right-1 z-50 w-10 h-6 text-white" />
           </Actions>
         </div>
