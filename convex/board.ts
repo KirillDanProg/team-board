@@ -37,13 +37,32 @@ export const createBoard = mutation({
 export const deleteBoard = mutation({
   args: { id: v.id("boards") },
   handler: async (ctx, args) => {
+    const { id } = args;
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Unauthorized");
     }
 
     try {
-      await ctx.db.delete(args.id);
+      await ctx.db.delete(id);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+});
+
+export const updateBoard = mutation({
+  args: { id: v.id("boards"), title: v.string() },
+  handler: async (ctx, args) => {
+    const { id, title } = args;
+    try {
+      const trimmedTitle = title.trim();
+      if (!trimmedTitle) {
+        throw new Error("Название обязательно");
+      }
+      await ctx.db.patch(id, { title: trimmedTitle });
       return true;
     } catch (error) {
       console.error(error);
