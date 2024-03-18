@@ -24,7 +24,8 @@ const OrganizationItem = ({ id, imageUrl, name }: Props) => {
     <li key={id} className="aspect-square relative">
       <Hint label={name} side="right" sideOffset={16} align="start" alignOffset={8}>
         <Image
-          fill
+          width={50}
+          height={50}
           alt="organization"
           src={imageUrl}
           onClick={onClickHandler}
