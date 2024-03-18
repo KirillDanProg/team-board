@@ -1,5 +1,5 @@
-import React from "react";
-import { Link2, Trash2 } from "lucide-react";
+import React, { useState } from "react";
+import { Edit2, Link2, Pencil, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,16 +12,26 @@ import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
 import ConfirmModal from "./confirm-modal";
+import { useRenameModal } from "@/hooks/use-rename-modal";
 
 interface Props {
   id: string;
+  title?: string;
   children: React.ReactNode;
   side?: DropdownMenuContentProps["side"];
   sideOffset?: DropdownMenuContentProps["sideOffset"];
   className?: string;
 }
-const Actions = ({ children, side = "right", sideOffset = 0, id, className }: Props) => {
-  const { mutate, isLoading } = useApiMutation(api.board.deleteBoard);
+const Actions = ({
+  children,
+  side = "right",
+  sideOffset = 0,
+  id,
+  className,
+  title = "",
+}: Props) => {
+  const { mutate: deleteBoardMutate, isLoading } = useApiMutation(api.board.deleteBoard);
+  const { onOpen, initialValues } = useRenameModal();
 
   const copyBoardLinkHandler = () => {
     window.navigator.clipboard
@@ -31,7 +41,7 @@ const Actions = ({ children, side = "right", sideOffset = 0, id, className }: Pr
   };
 
   const deleteBoardHandler = async () => {
-    const res = await mutate({ id });
+    const res = await deleteBoardMutate({ id });
     if (!res) {
       toast.error("Не удалось удалить борд");
     } else {
@@ -54,11 +64,15 @@ const Actions = ({ children, side = "right", sideOffset = 0, id, className }: Pr
           <Link2 className="w-4 h-4 mr-2" />
           Скопировать ссылку
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => onOpen(id, title)} className="cursor-pointer">
+          <Pencil className="w-4 h-4 mr-2" />
+          Изменить название
+        </DropdownMenuItem>
         <ConfirmModal
           color="red-600"
           action="Удалить"
           header="Удалить борд?"
-          description="Борд и весь его контент будет удален"
+          content="Борд и весь его контент будет удален"
           disabled={isLoading}
           onConfirm={deleteBoardHandler}
         >
@@ -73,3 +87,8 @@ const Actions = ({ children, side = "right", sideOffset = 0, id, className }: Pr
 };
 
 export default Actions;
+
+{
+  /* <Button variant="ghost" >
+</Button> */
+}
