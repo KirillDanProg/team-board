@@ -2,12 +2,15 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Overlay from "./overlay";
-import { useAuth } from "@clerk/nextjs";
-import { formatDistanceToNow } from "date-fns";
-import { ru } from "date-fns/locale";
 import Footer from "./footer";
 import Actions from "@/components/actions";
+import { useAuth } from "@clerk/nextjs";
+import { ru } from "date-fns/locale";
+import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
+import { api } from "@/convex/_generated/api";
+import { useApiMutation } from "@/hooks/use-api-mutation";
+import { toast } from "sonner";
 
 interface Props {
   id: string;
@@ -32,7 +35,26 @@ const BoardCard = ({
   const { userId } = useAuth();
   const authorLabel = userId === authorId ? "Вы" : authorName;
   const createdAtLabel = formatDistanceToNow(createdAt, { addSuffix: true, locale: ru });
+  const { mutate: onAddToFavorites, isLoading: isAddToFavoritesLoading } = useApiMutation(
+    api.board.addToFavorites
+  );
+  const { mutate: onDeleteFromFavorites, isLoading: isDeleteFromFavoritesLoading } = useApiMutation(
+    api.board.deleteFromFavorites
+  );
 
+  const toggleFavorites = async () => {
+    if (isFavorite) {
+      const res = await onDeleteFromFavorites({ id });
+      res
+        ? toast.success("Борд удален из избранных")
+        : toast.error("Не удалось удалить борд из избранных");
+    } else {
+      const res = await onAddToFavorites({ id });
+      res
+        ? toast.success("Борд добавлен в избранные")
+        : toast.error("Не удалось добавить борд в избранное");
+    }
+  };
   return (
     <Link href={`/boards/${id}`}>
       <div className="group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
@@ -48,8 +70,8 @@ const BoardCard = ({
           isFavorite={isFavorite}
           authorLabel={authorLabel}
           createdAtLabel={createdAtLabel}
-          onClick={() => {}}
-          disabled={false}
+          onClick={toggleFavorites}
+          disabled={isAddToFavoritesLoading || isDeleteFromFavoritesLoading}
         />
       </div>
     </Link>
