@@ -47,19 +47,21 @@ const BoardList = ({ query, orgId }: Props) => {
       <h2 className="text-2xl">{query.favorites ? "Избранные борды" : "Борды"}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
         <NewBoardButton orgId={orgId} disabled={false} />
-        {data?.map(({ _id, title, authorId, authorName, imageUrl, orgId, _creationTime }) => (
-          <BoardCard
-            key={_id}
-            id={_id}
-            title={title}
-            isFavorite={false}
-            imageUrl={imageUrl}
-            orgId={orgId}
-            authorId={authorId}
-            authorName={authorName}
-            createdAt={_creationTime}
-          />
-        ))}
+        {data?.map(
+          ({ _id, title, authorId, authorName, imageUrl, orgId, _creationTime, isFavorite }) => (
+            <BoardCard
+              key={_id}
+              id={_id}
+              title={title}
+              isFavorite={isFavorite}
+              imageUrl={imageUrl}
+              orgId={orgId}
+              authorId={authorId}
+              authorName={authorName}
+              createdAt={_creationTime}
+            />
+          )
+        )}
       </div>
     </div>
   );
