@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { MouseEventHandler } from "react";
 
 interface Props {
   title: string;
@@ -9,7 +10,12 @@ interface Props {
   onClick: () => void;
   disabled: boolean;
 }
-const Footer = ({ authorLabel, createdAtLabel, isFavorite, title, disabled }: Props) => {
+const Footer = ({ authorLabel, createdAtLabel, isFavorite, title, disabled, onClick }: Props) => {
+  const onFavoriteClickHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onClick();
+  };
   return (
     <div className="relative bg-white p-3">
       <p className="text-[13px] truncate m-w-[calc(100% - 20px)]">{title}</p>
@@ -17,6 +23,7 @@ const Footer = ({ authorLabel, createdAtLabel, isFavorite, title, disabled }: Pr
         {authorLabel}, {createdAtLabel}
       </p>
       <button
+        onClick={onFavoriteClickHandler}
         disabled={disabled}
         className={cn(
           "opacity-0 group-hover:opacity-100 transition absolute text-muted-foreground top-3 right-3 hover:text-blue-500",
