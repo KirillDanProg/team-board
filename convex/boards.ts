@@ -5,7 +5,7 @@ import { getAllOrThrow } from "convex-helpers/server/relationships";
 export const getBoards = query({
   args: {
     orgId: v.string(),
-    title: v.optional(v.string()),
+    search: v.optional(v.string()),
     favorites: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
@@ -31,11 +31,11 @@ export const getBoards = query({
       return boards.map((board) => ({ ...board, isFavorite: true }));
     }
 
-    if (args.title) {
+    if (args.search) {
       boards = await ctx.db
         .query("boards")
         .withSearchIndex("search_title", (q) =>
-          q.search("title", args.title!).eq("orgId", args.orgId)
+          q.search("title", args.search!).eq("orgId", args.orgId)
         )
         .collect();
     } else {
