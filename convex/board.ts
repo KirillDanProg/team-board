@@ -1,3 +1,4 @@
+import { exit } from "process";
 import { mutation } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -42,13 +43,24 @@ export const createBoard = mutation({
 export const deleteBoard = mutation({
   args: { id: v.id("boards") },
   handler: async (ctx, args) => {
-    const { id } = args;
     try {
       const identity = await ctx.auth.getUserIdentity();
       if (!identity) {
         throw new Error("Unauthorized");
       }
-      await ctx.db.delete(id);
+      const userId = identity.subject;
+      const existingFavorite = await ctx.db
+        .query("userFavorites")
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", args.id)
+        )
+        .unique();
+
+      if (existingFavorite) {
+        await ctx.db.delete(existingFavorite?._id);
+      }
+      await ctx.db.delete(args.id);
+
       return true;
     } catch (error) {
       console.error(error);
@@ -96,8 +108,8 @@ export const addToFavorites = mutation({
       const userId = identity.subject;
       const alreadyInFavorites = await ctx.db
         .query("userFavorites")
-        .withIndex("by_user_board_org", (q) =>
-          q.eq("userId", userId).eq("boardId", board._id).eq("orgId", board.orgId)
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", board._id)
         )
         .unique();
       if (alreadyInFavorites) {
@@ -133,8 +145,8 @@ export const deleteFromFavorites = mutation({
       const userId = identity.subject;
       const alreadyInFavorites = await ctx.db
         .query("userFavorites")
-        .withIndex("by_user_board_org", (q) =>
-          q.eq("userId", userId).eq("boardId", board._id).eq("orgId", board.orgId)
+        .withIndex("by_user_board", (q) =>
+          q.eq("userId", userId).eq("boardId", board._id)
         )
         .unique();
       if (!alreadyInFavorites) {
