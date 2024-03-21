@@ -14,7 +14,7 @@ interface Props {
   orgId: string;
 }
 const BoardList = ({ query, orgId }: Props) => {
-  const data = useQuery(api.boards.getBoards, { orgId });
+  const data = useQuery(api.boards.getBoards, { orgId, ...query });
   if (data === undefined) {
     return <div>Loading...</div>;
   }
@@ -44,11 +44,22 @@ const BoardList = ({ query, orgId }: Props) => {
 
   return (
     <div>
-      <h2 className="text-2xl">{query.favorites ? "Избранные борды" : "Борды"}</h2>
+      <h2 className="text-2xl">
+        {query.favorites ? "Избранные борды" : "Борды"}
+      </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
         <NewBoardButton orgId={orgId} disabled={false} />
         {data?.map(
-          ({ _id, title, authorId, authorName, imageUrl, orgId, _creationTime, isFavorite }) => (
+          ({
+            _id,
+            title,
+            authorId,
+            authorName,
+            imageUrl,
+            orgId,
+            _creationTime,
+            isFavorite,
+          }) => (
             <BoardCard
               key={_id}
               id={_id}
