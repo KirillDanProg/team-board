@@ -5,6 +5,7 @@ import EmptyBoards from "./empty-boards";
 import { api } from "@/convex/_generated/api";
 import BoardCard from "./board-card";
 import NewBoardButton from "./new-board-button";
+import Loading from "./loading";
 
 interface Props {
   query: {
@@ -16,7 +17,7 @@ interface Props {
 const BoardList = ({ query, orgId }: Props) => {
   const data = useQuery(api.boards.getBoards, { orgId, ...query });
   if (data === undefined) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
   if (!data.length && query.search) {
     return (
