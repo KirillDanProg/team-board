@@ -1,4 +1,4 @@
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
 const images = [
@@ -14,6 +14,18 @@ const images = [
   "/placeholder/10.svg",
   "/placeholder/11.svg",
 ];
+
+export const getBoard = query({
+  args: { id: v.id("boards") },
+  handler: async (ctx, args) => {
+    try {
+      return await ctx.db.get(args.id);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  },
+});
 
 export const createBoard = mutation({
   args: { orgId: v.string(), title: v.string() },
