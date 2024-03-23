@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { AuthLoading, Authenticated, ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import { Loading } from "@/app/components/auth/loading";
+import { Loading } from "@/components/auth/loading";
 import { ruRU } from "./localization";
 
 const CONVEX_URL = process.env.NEXT_PUBLIC_CONVEX_URL!;

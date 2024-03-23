@@ -34,13 +34,16 @@ const BoardCard = ({
 }: Props) => {
   const { userId } = useAuth();
   const authorLabel = userId === authorId ? "Вы" : authorName;
-  const createdAtLabel = formatDistanceToNow(createdAt, { addSuffix: true, locale: ru });
-  const { mutate: onAddToFavorites, isLoading: isAddToFavoritesLoading } = useApiMutation(
-    api.board.addToFavorites
-  );
-  const { mutate: onDeleteFromFavorites, isLoading: isDeleteFromFavoritesLoading } = useApiMutation(
-    api.board.deleteFromFavorites
-  );
+  const createdAtLabel = formatDistanceToNow(createdAt, {
+    addSuffix: true,
+    locale: ru,
+  });
+  const { mutate: onAddToFavorites, isLoading: isAddToFavoritesLoading } =
+    useApiMutation(api.board.addToFavorites);
+  const {
+    mutate: onDeleteFromFavorites,
+    isLoading: isDeleteFromFavoritesLoading,
+  } = useApiMutation(api.board.deleteFromFavorites);
 
   const toggleFavorites = async () => {
     if (isFavorite) {
@@ -56,12 +59,17 @@ const BoardCard = ({
     }
   };
   return (
-    <Link href={`/boards/${id}`}>
+    <Link href={`/board/${id}`}>
       <div className="group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
         <div className="relative flex-1 bg-amber-50">
           <Image src={imageUrl} className="object-fit" fill alt={title} />
           <Overlay />
-          <Actions title={title} id={id} side="right" className="opacity-0 group-hover:opacity-100">
+          <Actions
+            title={title}
+            id={id}
+            side="right"
+            className="opacity-0 group-hover:opacity-100"
+          >
             <MoreHorizontal className="absolute top-1 right-1 z-50 w-10 h-6 text-white" />
           </Actions>
         </div>

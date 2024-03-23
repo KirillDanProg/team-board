@@ -14,7 +14,7 @@ import React from "react";
 interface Props {
   children: React.ReactNode;
   header: string;
-  description?: string;
+  content?: string | React.ReactNode;
   disabled?: boolean;
   onConfirm: () => void;
   action: string;
@@ -23,11 +23,10 @@ interface Props {
 const ConfirmModal = ({
   children,
   header,
-  description,
+  content,
   disabled,
   onConfirm,
   action,
-  color,
 }: Props) => {
   const onConfirmHandler = () => {
     onConfirm();
@@ -38,15 +37,11 @@ const ConfirmModal = ({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{header}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogDescription asChild>{content}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            disabled={disabled}
-            onClick={onConfirmHandler}
-            className={`bg-${color}`}
-          >
+          <AlertDialogAction disabled={disabled} onClick={onConfirmHandler}>
             {action}
           </AlertDialogAction>
         </AlertDialogFooter>

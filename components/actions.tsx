@@ -30,7 +30,9 @@ const Actions = ({
   className,
   title = "",
 }: Props) => {
-  const { mutate: deleteBoardMutate, isLoading } = useApiMutation(api.board.deleteBoard);
+  const { mutate: deleteBoardMutate, isLoading } = useApiMutation(
+    api.board.deleteBoard
+  );
   const { onOpen, initialValues } = useRenameModal();
 
   const copyBoardLinkHandler = () => {
@@ -60,23 +62,31 @@ const Actions = ({
         sideOffset={sideOffset}
         className="w-60"
       >
-        <DropdownMenuItem className="cursor-pointer" onClick={copyBoardLinkHandler}>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={copyBoardLinkHandler}
+        >
           <Link2 className="w-4 h-4 mr-2" />
           Скопировать ссылку
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onOpen(id, title)} className="cursor-pointer">
+        <DropdownMenuItem
+          onClick={() => onOpen(id, title)}
+          className="cursor-pointer"
+        >
           <Pencil className="w-4 h-4 mr-2" />
           Изменить название
         </DropdownMenuItem>
         <ConfirmModal
-          color="red-600"
           action="Удалить"
           header="Удалить борд?"
           content="Борд и весь его контент будет удален"
           disabled={isLoading}
           onConfirm={deleteBoardHandler}
         >
-          <Button variant="ghost" className="w-full text-start pl-2 justify-start">
+          <Button
+            variant="ghost"
+            className="w-full text-start pl-2 justify-start"
+          >
             <Trash2 className="w-4 h-4 mr-2 text-red-600" />
             Удалить
           </Button>
