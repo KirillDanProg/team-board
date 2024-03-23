@@ -18,7 +18,7 @@ const NewBoardButton = ({ orgId, disabled }: Props) => {
     if (!boardId) {
       toast.error("Не удалось создать борд");
     } else {
-      router.push(`/board/${boardId}}`);
+      router.push(`/board/${boardId}`);
       toast.success("Борд успешно создан!");
     }
   };
