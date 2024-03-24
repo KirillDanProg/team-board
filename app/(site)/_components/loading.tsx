@@ -3,7 +3,7 @@
 export default function Loading() {
   return (
     <>
-      <div className="bg-neutral-100 w-[100px] h-12 rounded-md" />
+      <div className="bg-neutral-100 w-[160px] h-8 rounded-md" />
       <div
         className="
     grid grid-cols-1
