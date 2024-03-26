@@ -1,5 +1,3 @@
-"use client";
-
 import Info from "./info";
 import Participants from "./participants";
 import Toolbar from "./toolbar";
@@ -10,7 +8,7 @@ interface Props {
 export default function Canvas({ boardId }: Props) {
   return (
     <main className="bg-neutral-100 h-full w-full relative touch-none">
-      <Info />
+      <Info boardId={boardId} />
       <Participants />
       <Toolbar />
     </main>

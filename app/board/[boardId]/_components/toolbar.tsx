@@ -1,5 +1,3 @@
-"use client";
-
 export default function Toolbar() {
   return (
     <div className="absolute top-[50%] -translate-y-[50%] left-2  flex flex-col gap-y-4  ">
@@ -16,8 +14,8 @@ export default function Toolbar() {
   );
 }
 
-Toolbar.Skeleton = function ToolbarSekeleton() {
+export function ToolbarSkeleton() {
   return (
     <div className="absolute top-[50%] -translate-y-[50%] left-2 h-[360px] w-12  bg-white rounded-md shadow-md" />
   );
-};
+}

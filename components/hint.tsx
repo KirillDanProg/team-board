@@ -1,5 +1,11 @@
 import { ReactNode } from "react";
-import { Tooltip, TooltipProvider, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import { useRenameModal } from "@/hooks/use-rename-modal";
 
 interface Props {
   label: string;
@@ -10,19 +16,26 @@ interface Props {
   alignOffset?: number;
 }
 
-const Hint = ({ label, children, side, align, sideOffset, alignOffset }: Props) => {
+const Hint = ({
+  label,
+  children,
+  side,
+  align,
+  sideOffset,
+  alignOffset,
+}: Props) => {
   return (
     <TooltipProvider>
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent
-          className="text-white bg-black border-black opacity-0.5"
+          className="text-white bg-black/85"
           align={align}
           side={side}
           alignOffset={alignOffset}
           sideOffset={sideOffset}
         >
-          <p className="font-semibold capitalize">{label}</p>
+          <p className="font-normal">{label}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
