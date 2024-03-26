@@ -37,7 +37,7 @@ const Actions = ({
 
   const copyBoardLinkHandler = () => {
     window.navigator.clipboard
-      .writeText(`${window.location.origin}/boards/${id}`)
+      .writeText(`${window.location.origin}/board/${id}`)
       .then(() => toast.success("Ссылка на борд скопирована"))
       .catch(() => toast.error("Не удалось копировать ссылку"));
   };
