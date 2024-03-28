@@ -43,14 +43,26 @@ export default function Info({ boardId }: Props) {
       </Hint>
       <TabSeparator />
       <Hint label="Редактировать" sideOffset={10} align="center">
-        <Button onClick={onRenameHandler} variant="board">
+        <Button
+          onClick={onRenameHandler}
+          variant="board"
+          className="font-normal px-1.5"
+        >
           {board.title}
         </Button>
       </Hint>
       <TabSeparator />
-      <Actions id={boardId} title={board.title}>
-        <Button variant="board" size="icon">
-          <Menu />
+      <Actions id={boardId} title={board.title} sideOffset={12}>
+        <Button
+          variant="board"
+          size="icon"
+          className="border-none  focus-visible:ring-0 focus-visible:ring-offset-0"
+        >
+          <Menu
+            width={24}
+            height={24}
+            className="text-muted-foreground font-semibold"
+          />
         </Button>
       </Actions>
     </div>
