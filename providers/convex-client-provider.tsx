@@ -14,7 +14,9 @@ interface ConvexClientProviderProps {
   children: ReactNode;
 }
 
-export default function ConvexClientProvider({ children }: ConvexClientProviderProps) {
+export default function ConvexClientProvider({
+  children,
+}: ConvexClientProviderProps) {
   return (
     <ClerkProvider localization={ruRU}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>

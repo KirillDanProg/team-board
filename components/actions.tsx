@@ -60,7 +60,7 @@ const Actions = ({
         onClick={(e) => e.stopPropagation()}
         side={side}
         sideOffset={sideOffset}
-        className="w-60"
+        className="w-60 m-2"
       >
         <DropdownMenuItem
           className="cursor-pointer"
@@ -97,8 +97,3 @@ const Actions = ({
 };
 
 export default Actions;
-
-{
-  /* <Button variant="ghost" >
-</Button> */
-}
