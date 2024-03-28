@@ -1,11 +1,11 @@
 "use client";
-
 import { CanvasMode, CanvasState } from "@/types/canvas";
 import Info from "./info";
 import Participants from "./participants";
 import Toolbar from "./toolbar";
 import { useState } from "react";
 import { useCanRedo, useCanUndo, useHistory } from "@/liveblocks.config";
+import CursorPresence from "./cursor-presence";
 
 interface Props {
   boardId: string;
@@ -18,7 +18,6 @@ export default function Canvas({ boardId }: Props) {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-
   const redoHandler = () => {
     history.redo();
   };
@@ -38,6 +37,7 @@ export default function Canvas({ boardId }: Props) {
         redo={redoHandler}
         undo={undoHandler}
       />
+      <CursorPresence />
     </main>
   );
 }
