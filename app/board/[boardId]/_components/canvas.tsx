@@ -6,6 +6,7 @@ import Toolbar from "./toolbar";
 import { useState } from "react";
 import { useCanRedo, useCanUndo, useHistory } from "@/liveblocks.config";
 import CursorPresence from "./cursor-presence";
+import WorkSpace from "./work-space";
 
 interface Props {
   boardId: string;
@@ -37,7 +38,11 @@ export default function Canvas({ boardId }: Props) {
         redo={redoHandler}
         undo={undoHandler}
       />
-      <CursorPresence />
+      <WorkSpace
+        canvasState={canvasState}
+        setCanvasState={setCanvasState}
+        history={history}
+      />
     </main>
   );
 }
