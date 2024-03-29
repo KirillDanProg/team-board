@@ -1,46 +1,56 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Cursor from "./cursor";
-import { connectionIdToColor } from "@/lib/utils";
-import { useMutation, useMyPresence, useOthers } from "@/liveblocks.config";
+import {
+  useMutation,
+  useOthers,
+  useOthersConnectionIds,
+} from "@/liveblocks.config";
+import { Camera } from "@/types/canvas";
+import { pointerEventToCanvasPoint } from "@/lib/utils";
 
-export default function CursorPresence() {
+function Cursors() {
+  const othersIds = useOthersConnectionIds();
+
+  return (
+    <>
+      {othersIds.map((connectionId) => {
+        return <Cursor key={connectionId} connectionId={connectionId} />;
+      })}
+    </>
+  );
+}
+function CursorPresence() {
   const others = useOthers();
-  const [{ cursor }, updateMyPresence] = useMyPresence();
+  const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    setCamera((camera) => ({
+      x: camera.x - e.deltaX,
+      y: camera.y - e.deltaY,
+    }));
+  }, []);
   const onPointerMoveHandler = useMutation(({ setMyPresence }, e) => {
     e.preventDefault();
-    const current = {
-      x: Math.round(e.clientX),
-      y: Math.round(e.clientY),
-    };
+    const current = pointerEventToCanvasPoint(e, camera);
     setMyPresence({ cursor: current });
   }, []);
 
+  const onPointerLeaveHandler = useMutation(({ setMyPresence }, e) => {
+    e.preventDefault();
+    setMyPresence({ cursor: null });
+  }, []);
   return (
     <svg
       className="h-[100vh] w-[100vw]"
+      onWheel={onWheel}
       onPointerMove={onPointerMoveHandler}
-      onPointerLeave={() =>
-        updateMyPresence({
-          cursor: null,
-        })
-      }
+      onPointerLeave={onPointerLeaveHandler}
     >
       <g>
-        {others.map(({ connectionId, presence }) => {
-          if (presence.cursor === null) {
-            return null;
-          }
-
-          return (
-            <Cursor
-              key={connectionId}
-              color={connectionIdToColor(connectionId)}
-              x={presence.cursor.x}
-              y={presence.cursor.y}
-            />
-          );
-        })}
+        <Cursors />
       </g>
     </svg>
   );
 }
+
+export default React.memo(CursorPresence);
