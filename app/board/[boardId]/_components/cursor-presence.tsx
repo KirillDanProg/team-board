@@ -1,12 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import Cursor from "./cursor";
-import {
-  useMutation,
-  useOthers,
-  useOthersConnectionIds,
-} from "@/liveblocks.config";
-import { Camera } from "@/types/canvas";
-import { pointerEventToCanvasPoint } from "@/lib/utils";
+import { useOthersConnectionIds } from "@/liveblocks.config";
 
 function Cursors() {
   const othersIds = useOthersConnectionIds();
@@ -20,36 +14,10 @@ function Cursors() {
   );
 }
 function CursorPresence() {
-  const others = useOthers();
-  const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
-
-  const onWheel = useCallback((e: React.WheelEvent) => {
-    setCamera((camera) => ({
-      x: camera.x - e.deltaX,
-      y: camera.y - e.deltaY,
-    }));
-  }, []);
-  const onPointerMoveHandler = useMutation(({ setMyPresence }, e) => {
-    e.preventDefault();
-    const current = pointerEventToCanvasPoint(e, camera);
-    setMyPresence({ cursor: current });
-  }, []);
-
-  const onPointerLeaveHandler = useMutation(({ setMyPresence }, e) => {
-    e.preventDefault();
-    setMyPresence({ cursor: null });
-  }, []);
   return (
-    <svg
-      className="h-[100vh] w-[100vw]"
-      onWheel={onWheel}
-      onPointerMove={onPointerMoveHandler}
-      onPointerLeave={onPointerLeaveHandler}
-    >
-      <g>
-        <Cursors />
-      </g>
-    </svg>
+    <>
+      <Cursors />
+    </>
   );
 }
 
