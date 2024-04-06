@@ -10,13 +10,12 @@ import { useRenameModal } from "@/hooks/use-rename-modal";
 import Actions from "@/components/actions";
 import Image from "next/image";
 import Link from "next/link";
+import { TabSeparator } from "@/components/tab-separator";
+
 interface Props {
   boardId: string;
 }
 
-function TabSeparator() {
-  return <div className="text-neutral-300 px-1.5">|</div>;
-}
 export default function Info({ boardId }: Props) {
   const { onOpen } = useRenameModal();
   const board = useQuery(api.board.getBoard, {
@@ -41,7 +40,7 @@ export default function Info({ boardId }: Props) {
           </Link>
         </Button>
       </Hint>
-      <TabSeparator />
+      <TabSeparator height={12} />
       <Hint label="Редактировать" sideOffset={10} align="center">
         <Button
           onClick={onRenameHandler}
@@ -51,7 +50,7 @@ export default function Info({ boardId }: Props) {
           {board.title}
         </Button>
       </Hint>
-      <TabSeparator />
+      <TabSeparator height={12} />
       <Actions id={boardId} title={board.title} sideOffset={12}>
         <Button
           variant="board"

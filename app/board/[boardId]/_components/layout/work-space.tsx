@@ -19,13 +19,13 @@ import {
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "@/lib/utils";
-import CursorPresence from "./cursor-presence";
+import CursorPresence from "../cursor/cursor-presence";
 import { History, LiveObject } from "@liveblocks/client";
 import { nanoid } from "nanoid";
-import { LayerPreview } from "./layer-preview";
-import Ellipse from "./layers/ellipse";
-import SelectionTools from "./selection-tools/selection-tools";
-import SelectionBox from "./selection-tools/selection-box";
+import { LayerPreview } from "../layers/layer-preview";
+import Ellipse from "../layers/ellipse";
+import SelectionTools from "../selection-tools/selection-tools";
+import SelectionBox from "../selection-tools/selection-box";
 
 const MAX_LAYERS = 100;
 

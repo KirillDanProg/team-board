@@ -7,19 +7,19 @@ import { useStorage } from "@/liveblocks.config";
 
 // import { Text } from "./text";
 // import { Ellipse } from "./ellipse";
-import Rectangle from "./layers/rectangle";
-import Ellipse from "./layers/ellipse";
+import Rectangle from "./rectangle";
+import Ellipse from "./ellipse";
 // import { Note } from "./note";
 // import { Path } from "./path";
 
-interface LayerPreviewProps {
+interface Props {
   id: string;
   onLayerPointerDown: (e: React.PointerEvent, layerId: string) => void;
   selectionColor?: string;
 }
 
 export const LayerPreview = memo(
-  ({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
+  ({ id, onLayerPointerDown, selectionColor }: Props) => {
     const layer = useStorage((root) => root.layers.get(id));
 
     if (!layer) {
