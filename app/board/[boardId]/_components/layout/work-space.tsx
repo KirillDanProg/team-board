@@ -1,31 +1,38 @@
 "use client";
 
-import React, { useCallback, useMemo, useState, useEffect } from "react";
-import { useMutation, useOthersMapped, useStorage } from "@/liveblocks.config";
+import React, { useCallback, useMemo, useState } from "react";
+import { nanoid } from "nanoid";
+import {
+  useMutation,
+  useOthersMapped,
+  useSelf,
+  useStorage,
+} from "@/liveblocks.config";
+import { History, LiveObject } from "@liveblocks/client";
 import {
   Camera,
-  CanvasMode,
   Color,
+  CanvasMode,
   LayerType,
   Point,
   CanvasState,
   Layer,
-  EllipseLayer,
   Side,
   XYWH,
 } from "@/types/canvas";
 import {
+  colorToCss,
   connectionIdToColor,
   findIntersectingLayersWithRectangle,
+  penPointsToPathLayer,
   pointerEventToCanvasPoint,
   resizeBounds,
 } from "@/lib/utils";
 import CursorPresence from "../cursor/cursor-presence";
-import { History, LiveObject } from "@liveblocks/client";
-import { nanoid } from "nanoid";
-import LayerPreview from "../layers/layer-preview";
 import SelectionTools from "../selection-tools/selection-tools";
 import SelectionBox from "../selection-tools/selection-box";
+import Path from "../layers/path";
+import LayerPreview from "../layers/layer-preview";
 
 const MAX_LAYERS = 100;
 
@@ -38,6 +45,7 @@ type Props = {
 function WorkSpace({ canvasState, setCanvasState, history }: Props) {
   const layerIds = useStorage((root) => root.layerIds);
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
+  const pencilDraft = useSelf((me) => me.presence.pencilDraft);
   const [lastUsedColor, setLastUsedColor] = useState<Color>({
     r: 0,
     g: 0,
@@ -78,6 +86,33 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
     },
     [lastUsedColor]
   );
+  const insertPath = useMutation(
+    ({ storage, setMyPresence, self }) => {
+      const liveLayers = storage.get("layers");
+      const { pencilDraft } = self.presence;
+
+      if (
+        pencilDraft == null ||
+        pencilDraft.length < 2 ||
+        liveLayers.size >= MAX_LAYERS
+      ) {
+        setMyPresence({ pencilDraft: null });
+        return;
+      }
+
+      const id = nanoid();
+      liveLayers.set(
+        id,
+        new LiveObject(penPointsToPathLayer(pencilDraft, lastUsedColor))
+      );
+      const liveLayerIds = storage.get("layerIds");
+      liveLayerIds.push(id);
+      setMyPresence({ pencilDraft: null });
+      setCanvasState({ mode: CanvasMode.Pencil });
+    },
+    [lastUsedColor]
+  );
+
   const translateSelectedLayers = useMutation(
     ({ storage, self }, point) => {
       if (canvasState.mode !== CanvasMode.Translating) {
@@ -180,6 +215,40 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
     [history, setCanvasState]
   );
 
+  const startDrawing = useMutation(
+    ({ setMyPresence }, point: Point, pressure: number) => {
+      setMyPresence({
+        pencilDraft: [[point.x, point.y, pressure]],
+        pencilColor: lastUsedColor,
+      });
+    },
+    [lastUsedColor]
+  );
+  const continueDrawing = useMutation(
+    ({ self, setMyPresence }, point: Point, e: PointerEvent) => {
+      const { pencilDraft } = self.presence;
+
+      if (
+        canvasState.mode !== CanvasMode.Pencil ||
+        e.buttons !== 1 ||
+        pencilDraft == null
+      ) {
+        return;
+      }
+
+      setMyPresence({
+        cursor: point,
+        pencilDraft:
+          pencilDraft.length === 1 &&
+          pencilDraft[0][0] === point.x &&
+          pencilDraft[0][1] === point.y
+            ? pencilDraft
+            : [...pencilDraft, [point.x, point.y, e.pressure]],
+      });
+    },
+    [canvasState.mode]
+  );
+
   const onLayerPointerDown = useMutation(
     ({ self, setMyPresence }, e: React.PointerEvent, layerId: string) => {
       if (
@@ -225,6 +294,8 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
         setCanvasState({
           mode: CanvasMode.None,
         });
+      } else if (canvasState.mode === CanvasMode.Pencil) {
+        insertPath();
       } else if (canvasState.mode === CanvasMode.Inserting) {
         insertLayer(canvasState.layerType, point);
       } else {
@@ -253,9 +324,14 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
       if (canvasState.mode === CanvasMode.Inserting) {
         return;
       }
+
+      if (canvasState.mode === CanvasMode.Pencil) {
+        startDrawing(point, e.pressure);
+        return;
+      }
       setCanvasState({ origin: point, mode: CanvasMode.Pressing });
     },
-    [camera, canvasState.mode, setCanvasState]
+    [camera, canvasState.mode, setCanvasState, startDrawing]
   );
 
   const onPointerMoveHandler = useMutation(
@@ -270,10 +346,20 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
         translateSelectedLayers(current);
       } else if (canvasState.mode === CanvasMode.Resizing) {
         resizeSelectedLayer(current);
+      } else if (canvasState.mode === CanvasMode.Pencil) {
+        continueDrawing(current, e);
       }
       setMyPresence({ cursor: current });
     },
-    [canvasState, translateSelectedLayers]
+    [
+      camera,
+      canvasState,
+      translateSelectedLayers,
+      startMultiSelection,
+      updateSelectionNet,
+      resizeSelectedLayer,
+      continueDrawing,
+    ]
   );
 
   const onPointerLeaveHandler = useMutation(({ setMyPresence }, e) => {
@@ -283,14 +369,7 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
 
   return (
     <>
-      <SelectionTools
-        isAnimated={
-          canvasState.mode !== CanvasMode.Translating &&
-          canvasState.mode !== CanvasMode.Resizing
-        }
-        camera={camera}
-        setLastUsedColor={setLastUsedColor}
-      />
+      <SelectionTools camera={camera} setLastUsedColor={setLastUsedColor} />
       <svg
         className="h-[100vh] w-[100vw]"
         onWheel={onWheel}
@@ -323,6 +402,14 @@ function WorkSpace({ canvasState, setCanvasState, history }: Props) {
                 height={Math.abs(canvasState.origin.y - canvasState.current.y)}
               />
             )}
+          {pencilDraft != null && pencilDraft.length > 0 && (
+            <Path
+              points={pencilDraft}
+              fill={colorToCss(lastUsedColor)}
+              x={0}
+              y={0}
+            />
+          )}
           <CursorPresence />
         </g>
       </svg>
