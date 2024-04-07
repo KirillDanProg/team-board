@@ -17,7 +17,12 @@ export type Camera = {
   y: number;
 };
 
-export type Layer = RectangleLayer | EllipseLayer | PathLayer | NoteLayer;
+export type Layer =
+  | RectangleLayer
+  | EllipseLayer
+  | PathLayer
+  | NoteLayer
+  | TextLayer;
 
 export type RectangleLayer = {
   type: LayerType.Rectangle;
@@ -26,6 +31,7 @@ export type RectangleLayer = {
   height: number;
   width: number;
   fill: Color;
+  value?: string;
 };
 
 export type EllipseLayer = {
@@ -35,6 +41,7 @@ export type EllipseLayer = {
   height: number;
   width: number;
   fill: Color;
+  value?: string;
 };
 
 export type PathLayer = {
@@ -54,7 +61,7 @@ export type NoteLayer = {
   height: number;
   width: number;
   fill: Color;
-  value: string;
+  value?: string;
 };
 
 export type TextLayer = {
@@ -64,7 +71,7 @@ export type TextLayer = {
   height: number;
   width: number;
   fill: Color;
-  value: string;
+  value?: string;
 };
 
 export type Point = {
@@ -121,11 +128,11 @@ export type CanvasState =
     };
 
 export enum CanvasMode {
-  None,
-  Pressing,
-  SelectionNet,
-  Translating,
-  Inserting,
-  Resizing,
-  Pencil,
+  None = "none",
+  Pressing = "press",
+  SelectionNet = "select",
+  Translating = "trans",
+  Inserting = "insert",
+  Resizing = "resize",
+  Pencil = "pen",
 }
