@@ -10,7 +10,6 @@ import Hint from "@/components/hint";
 import { TabSeparator } from "@/components/tab-separator";
 
 type SelectionToolsProps = {
-  isAnimated: boolean;
   camera: Camera;
   setLastUsedColor: (color: Color) => void;
 };
