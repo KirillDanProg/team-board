@@ -4,6 +4,7 @@ import ContentEditable, {
   type ContentEditableEvent,
 } from "react-contenteditable";
 import { useMutation } from "@/liveblocks.config";
+import { shantell } from "@/lib/fonts";
 
 interface Props {
   id: string;
@@ -29,7 +30,7 @@ export default function Text({
   );
 
   const calculateFontSize = (width: number, height: number) => {
-    const maxSize = 72;
+    const maxSize = 36;
     const scaleFactor = 0.35;
     const fontSizeBasedOnHeight = height * scaleFactor;
     const fontSizeBasedOnWidth = width * scaleFactor;
@@ -51,7 +52,8 @@ export default function Text({
         html={value ?? value ?? "Текст"}
         onChange={onChangeHandler}
         className={cn(
-          "h-full w-full flex items-center justify-center flex-col  outline-none"
+          "h-full w-full flex items-center justify-center text-center outline-none",
+          shantell.className
         )}
         style={{
           fontWeight: "600",
