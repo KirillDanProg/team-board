@@ -32,7 +32,6 @@ function SelectionTools({ camera, setLastUsedColor }: SelectionToolsProps) {
           indices.push(i);
         }
       }
-
       for (let i = indices.length - 1; i >= 0; i--) {
         liveLayerIds.move(
           indices[i],
@@ -55,7 +54,6 @@ function SelectionTools({ camera, setLastUsedColor }: SelectionToolsProps) {
           indices.push(i);
         }
       }
-      debugger;
       for (let i = 0; i < indices.length; i++) {
         liveLayerIds.move(indices[i], i);
       }

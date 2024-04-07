@@ -23,11 +23,10 @@ function SelectionBox({ onResizeHandlePointerDown }: SelectionBoxProps) {
   if (!bounds) {
     return null;
   }
-
   return (
     <>
       <rect
-        className="fill-none stroke-1 stroke-blue-500"
+        className="fill-none stroke-1 stroke-blue-300"
         style={{
           transform: `translate(${bounds.x}px, ${bounds.y}px)`,
         }}

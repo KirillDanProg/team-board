@@ -1,6 +1,6 @@
-import { InfoSkeleton } from "./info";
-import { ParticipantsSkeleton } from "./participants";
-import { ToolbarSkeleton } from "./toolbar";
+import { InfoSkeleton } from "./layout/info";
+import { ParticipantsSkeleton } from "./layout/participants/participants";
+import { ToolbarSkeleton } from "./layout/toolbar/toolbar";
 import { Loader } from "lucide-react";
 
 export default function Loading() {
