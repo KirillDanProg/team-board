@@ -1,22 +1,23 @@
 "use client";
 
-import Hint from "@/components/hint";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { useRenameModal } from "@/hooks/use-rename-modal";
+import Hint from "@/components/hint";
 import Actions from "@/components/actions";
-import Image from "next/image";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { TabSeparator } from "@/components/tab-separator";
+import { useRenameModal } from "@/hooks/use-rename-modal";
+import { Menu } from "lucide-react";
 
 interface Props {
   boardId: string;
 }
 
-export default function Info({ boardId }: Props) {
+function Info({ boardId }: Props) {
   const { onOpen } = useRenameModal();
   const board = useQuery(api.board.getBoard, {
     id: boardId as Id<"boards">,
@@ -73,3 +74,5 @@ export function InfoSkeleton() {
     <div className="absolute top-2 left-2 flex items-center justify-center px-2 bg-white h-12 w-[300px] rounded-md shadow-md" />
   );
 }
+
+export default React.memo(Info);

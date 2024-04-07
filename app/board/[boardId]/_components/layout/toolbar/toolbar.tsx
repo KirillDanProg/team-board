@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import {
   Circle,
   MousePointer2,
@@ -22,7 +22,7 @@ interface Props {
   canUndo: boolean;
 }
 
-export default function Toolbar({
+function Toolbar({
   undo,
   redo,
   canUndo,
@@ -145,3 +145,5 @@ export function ToolbarSkeleton() {
     <div className="absolute top-[50%] -translate-y-[50%] left-2 h-[360px] w-12  bg-white rounded-md shadow-md" />
   );
 }
+
+export default React.memo(Toolbar);
