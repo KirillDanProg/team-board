@@ -5,7 +5,7 @@ import {
   createClient,
 } from "@liveblocks/client";
 import { createRoomContext, createLiveblocksContext } from "@liveblocks/react";
-import { Layer } from "./types/canvas";
+import { Layer, type Color } from "./types/canvas";
 
 const client = createClient({
   throttle: 16,
@@ -18,6 +18,8 @@ const client = createClient({
 type Presence = {
   cursor: { x: number; y: number } | null;
   selection: string[];
+  pencilDraft: [x: number, y: number, pressure: number][] | null;
+  pencilColor: Color | null;
 };
 // Optionally, Storage represents the shared document that persists in the
 // Room, even after all users leave. Fields under Storage typically are
